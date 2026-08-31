@@ -26,11 +26,12 @@ document.addEventListener('DOMContentLoaded', function () {
       event.preventDefault();
 
       var service = document.getElementById('service').value;
+      var area = document.getElementById('area').value;
       var name = document.getElementById('name').value;
       var date = document.getElementById('date').value.trim();
       var time = document.getElementById('time').value.trim();
 
-      if (!service || !name) {
+      if (!service || !area || !name) {
         alert('נא למלא את כל השדות הנדרשים');
         return;
       }
