@@ -27,9 +27,21 @@ document.addEventListener('DOMContentLoaded', function () {
 
       var service = document.getElementById('service').value;
       var name = document.getElementById('name').value;
+      var date = document.getElementById('date').value.trim();
+      var time = document.getElementById('time').value.trim();
 
       if (!service || !name) {
         alert('נא למלא את כל השדות הנדרשים');
+        return;
+      }
+
+      if (!/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(date)) {
+        alert('נא להזין תאריך בפורמט הבא: 15/09/2026');
+        return;
+      }
+
+      if (!/^\d{1,2}:\d{2}$/.test(time)) {
+        alert('נא להזין שעה בפורמט הבא: 14:30');
         return;
       }
 
