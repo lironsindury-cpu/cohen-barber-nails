@@ -186,15 +186,27 @@
         </div>
 
         <div class="form-row form-row-split">
-          <div>
+          <div class="date-field-wrap">
             <label for="date">תאריך</label>
-            <input type="text" id="date" name="date" placeholder="15/09/2026" required>
+            <input type="text" id="date" name="date" placeholder="15/09/2026" autocomplete="off" required>
+            <div class="calendar-popup" id="calendarPopup">
+              <div class="cal-header">
+                <button type="button" id="calNext" aria-label="חודש הבא">&#8249;</button>
+                <span id="calMonthLabel">ספטמבר 2026</span>
+                <button type="button" id="calPrev" aria-label="חודש קודם">&#8250;</button>
+              </div>
+              <div class="cal-weekdays">
+                <span>א</span><span>ב</span><span>ג</span><span>ד</span><span>ה</span><span>ו</span><span>ש</span>
+              </div>
+              <div class="cal-days" id="calDays"></div>
+            </div>
           </div>
           <div>
             <label for="time">שעה</label>
             <input type="text" id="time" name="time" placeholder="14:30" required>
           </div>
         </div>
+        <p class="field-hint">התאריך תמיד מוצג במספרים, בלי קשר להגדרות לוח השנה של המכשיר שלכם.</p>
 
         <div class="form-row">
           <label for="name">שם מלא</label>
