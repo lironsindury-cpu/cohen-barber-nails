@@ -678,7 +678,7 @@
           </div>
           <div>
             <label for="time">שעה</label>
-            <input type="text" id="time" name="time" placeholder="14:30" required>
+            <input type="text" id="time" name="time" placeholder="14:30" inputmode="numeric" maxlength="5" autocomplete="off" required>
           </div>
         </div>
         <p class="field-hint">התאריך תמיד מוצג במספרים, בלי קשר להגדרות לוח השנה של המכשיר שלכם.</p>
@@ -686,6 +686,12 @@
         <div class="form-row">
           <label for="name">שם מלא</label>
           <input type="text" id="name" name="name" placeholder="ישראל ישראלי" required>
+        </div>
+
+        <div class="form-row">
+          <label for="birthdate">תאריך לידה</label>
+          <input type="text" id="birthdate" name="birthdate" placeholder="15/09/2013" inputmode="numeric" maxlength="10" autocomplete="off" required>
+          <p class="field-hint">ההזמנה מיועדת לגילאי 12 ומעלה. מתחת לגיל 12 נדרש ליווי ואישור הורה - אנא צרו קשר טלפוני להזמנה.</p>
         </div>
 
         <div class="form-row">

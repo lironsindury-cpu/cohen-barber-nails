@@ -19,6 +19,50 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
+  // עיצוב אוטומטי תוך כדי הקלדה: מקלידים ספרות בלבד, הקווים הנטויים/נקודתיים נכנסים לבד
+  function attachDateMask(el) {
+    if (!el) return;
+    el.addEventListener('input', function () {
+      var digits = el.value.replace(/\D/g, '').slice(0, 8);
+      var formatted = digits;
+      if (digits.length > 4) {
+        formatted = digits.slice(0, 2) + '/' + digits.slice(2, 4) + '/' + digits.slice(4);
+      } else if (digits.length > 2) {
+        formatted = digits.slice(0, 2) + '/' + digits.slice(2);
+      }
+      el.value = formatted;
+    });
+  }
+
+  function attachTimeMask(el) {
+    if (!el) return;
+    el.addEventListener('input', function () {
+      var digits = el.value.replace(/\D/g, '').slice(0, 4);
+      var formatted = digits;
+      if (digits.length > 2) {
+        formatted = digits.slice(0, 2) + ':' + digits.slice(2);
+      }
+      el.value = formatted;
+    });
+  }
+
+  attachDateMask(document.getElementById('date'));
+  attachDateMask(document.getElementById('birthdate'));
+  attachTimeMask(document.getElementById('time'));
+
+  // גיל מתאריך לידה בפורמט DD/MM/YYYY
+  function calculateAge(dateStr) {
+    var parts = dateStr.split('/');
+    var birth = new Date(Number(parts[2]), Number(parts[1]) - 1, Number(parts[0]));
+    var now = new Date();
+    var age = now.getFullYear() - birth.getFullYear();
+    var monthDiff = now.getMonth() - birth.getMonth();
+    if (monthDiff < 0 || (monthDiff === 0 && now.getDate() < birth.getDate())) {
+      age--;
+    }
+    return age;
+  }
+
   var PROVIDERS = {
     1: { name: 'יוסי כהן', phone: '0501234567' },
     2: { name: 'מאיה לוי', phone: '0507654321' },
@@ -48,6 +92,7 @@ document.addEventListener('DOMContentLoaded', function () {
       var name = document.getElementById('name').value;
       var date = document.getElementById('date').value.trim();
       var time = document.getElementById('time').value.trim();
+      var birthdate = document.getElementById('birthdate').value.trim();
 
       if (!service || !area || !name) {
         alert('נא למלא את כל השדות הנדרשים');
@@ -66,6 +111,17 @@ document.addEventListener('DOMContentLoaded', function () {
 
       if (!/^\d{1,2}:\d{2}$/.test(time)) {
         alert('נא להזין שעה בפורמט הבא: 14:30');
+        return;
+      }
+
+      if (!/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(birthdate)) {
+        alert('נא להזין תאריך לידה בפורמט הבא: 15/09/2013');
+        return;
+      }
+
+      var age = calculateAge(birthdate);
+      if (age < 12) {
+        alert('ההזמנה מיועדת לגילאי 12 ומעלה. מתחת לגיל 12 נדרש ליווי הורה - אנא צרו קשר טלפוני ישירות להזמנה.');
         return;
       }
 
