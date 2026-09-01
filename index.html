@@ -633,6 +633,33 @@
           <p class="field-hint">כדי שנתאים לכם ספר/ית או קוסמטיקאית באזור שלכם.</p>
         </div>
 
+        <div class="form-row">
+          <label>בחרו ספר/ית</label>
+          <div class="provider-list" id="providerList">
+            <div class="provider-card" data-provider="1" onclick="selectProvider(1)">
+              <div class="provider-name">יוסי כהן</div>
+              <div class="provider-spec">פייד ותער · גברים</div>
+              <div class="provider-area">חיפה והקריות</div>
+            </div>
+            <div class="provider-card" data-provider="2" onclick="selectProvider(2)">
+              <div class="provider-name">מאיה לוי</div>
+              <div class="provider-spec">מניקור ופדיקור</div>
+              <div class="provider-area">תל אביב והמרכז</div>
+            </div>
+            <div class="provider-card" data-provider="3" onclick="selectProvider(3)">
+              <div class="provider-name">רון אזולאי</div>
+              <div class="provider-spec">תספורת + עיצוב זקן</div>
+              <div class="provider-area">ירושלים והסביבה</div>
+            </div>
+            <div class="provider-card" data-provider="4" onclick="selectProvider(4)">
+              <div class="provider-name">נועה שרון</div>
+              <div class="provider-spec">לק ג'ל ועיצוב ציפורניים</div>
+              <div class="provider-area">חיפה והקריות</div>
+            </div>
+          </div>
+          <p class="field-hint">כרגע אלה ספרים לדוגמה. ספרים אמיתיים שיצטרפו לרשת יופיעו כאן.</p>
+        </div>
+
         <div class="form-row form-row-split">
           <div class="date-field-wrap">
             <label for="date">תאריך</label>
@@ -668,6 +695,16 @@
 
         <button type="submit" class="btn btn-primary booking-submit">קביעת תור</button>
       </form>
+
+      <div class="payment-panel" id="paymentPanel">
+        <h3>התור נשלח ל<span id="paymentProviderName"></span></h3>
+        <p>נעדכן אתכם לאישור סופי. לתשלום ישירות לספר/ית, בחרו את האפליקציה שבה אתם משתמשים:</p>
+        <div class="payment-buttons">
+          <a href="#" id="bitPayLink" target="_blank" class="btn btn-primary payment-btn">תשלום ב-Bit</a>
+          <a href="#" id="payboxPayLink" target="_blank" class="btn btn-outline payment-btn">תשלום ב-PayBox</a>
+        </div>
+        <p class="field-hint">קישורי התשלום הם לדוגמה בלבד. כשספר/ית אמיתי/ת מצטרפ/ת לרשת, מחברים כאן את קישור התשלום האישי שלה/ו מ-Bit או PayBox.</p>
+      </div>
     </div>
   </div>
 </section>

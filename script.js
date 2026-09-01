@@ -19,7 +19,25 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
+  var PROVIDERS = {
+    1: { name: 'יוסי כהן', phone: '0501234567' },
+    2: { name: 'מאיה לוי', phone: '0507654321' },
+    3: { name: 'רון אזולאי', phone: '0521112233' },
+    4: { name: 'נועה שרון', phone: '0534445566' }
+  };
+
+  var selectedProviderId = null;
+
+  window.selectProvider = function (id) {
+    selectedProviderId = id;
+    var cards = document.querySelectorAll('.provider-card');
+    for (var i = 0; i < cards.length; i++) {
+      cards[i].classList.toggle('selected', Number(cards[i].getAttribute('data-provider')) === id);
+    }
+  };
+
   var bookingForm = document.getElementById('bookingForm');
+  var paymentPanel = document.getElementById('paymentPanel');
 
   if (bookingForm) {
     bookingForm.addEventListener('submit', function (event) {
@@ -36,6 +54,11 @@ document.addEventListener('DOMContentLoaded', function () {
         return;
       }
 
+      if (!selectedProviderId) {
+        alert('נא לבחור ספר/ית');
+        return;
+      }
+
       if (!/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(date)) {
         alert('נא להזין תאריך בפורמט הבא: 15/09/2026');
         return;
@@ -46,10 +69,19 @@ document.addEventListener('DOMContentLoaded', function () {
         return;
       }
 
-      alert('התור נקבע! ניצור איתך קשר לאישור.');
-      bookingForm.reset();
+      var provider = PROVIDERS[selectedProviderId];
+
+      document.getElementById('paymentProviderName').textContent = ' ' + provider.name;
+      // קישורים לדוגמה בלבד - יוחלפו בקישור התשלום האישי האמיתי של כל ספר/ית מ-Bit / PayBox
+      document.getElementById('bitPayLink').href = 'https://www.bitpay.co.il/app/me/' + provider.phone;
+      document.getElementById('payboxPayLink').href = 'https://links.payboxapp.com/' + provider.phone;
+
+      bookingForm.style.display = 'none';
+      paymentPanel.classList.add('show');
+      paymentPanel.scrollIntoView({ behavior: 'smooth', block: 'center' });
     });
   }
+
 
   // לוח שנה מותאם - תמיד מציג ספרות רגילות (לוח גרגוריאני),
   // בלי קשר להגדרות לוח השנה של המכשיר של המשתמש
