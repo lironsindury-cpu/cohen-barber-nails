@@ -69,6 +69,8 @@ document.addEventListener('DOMContentLoaded', function () {
       name: 'יוסי כהן',
       spec: 'פייד ותער · גברים',
       phone: '0501234567',
+      initials: 'יכ',
+      avatarBg: 'linear-gradient(155deg, #B8935A, #8C6A3C)',
       areas: ['חיפה', 'קריית ים', 'קריית מוצקין', 'קריית ביאליק', 'קריית אתא', 'טירת כרמל', 'נשר']
     },
     {
@@ -76,6 +78,8 @@ document.addEventListener('DOMContentLoaded', function () {
       name: 'מאיה לוי',
       spec: 'מניקור ופדיקור',
       phone: '0507654321',
+      initials: 'מל',
+      avatarBg: 'linear-gradient(155deg, #8A2C39, #6B1F2A)',
       areas: ['תל אביב-יפו', 'רמת גן', 'גבעתיים', 'בני ברק', 'חולון', 'בת ים', 'ראשון לציון', 'אשדוד', 'רחובות', 'הרצליה']
     },
     {
@@ -83,6 +87,8 @@ document.addEventListener('DOMContentLoaded', function () {
       name: 'רון אזולאי',
       spec: 'תספורת + עיצוב זקן',
       phone: '0521112233',
+      initials: 'רא',
+      avatarBg: 'linear-gradient(155deg, #3A2F25, #211B16)',
       areas: ['ירושלים', 'מבשרת ציון', 'בית שמש', 'מעלה אדומים', 'אבו גוש']
     },
     {
@@ -90,6 +96,8 @@ document.addEventListener('DOMContentLoaded', function () {
       name: 'נועה שרון',
       spec: "לק ג'ל ועיצוב ציפורניים",
       phone: '0534445566',
+      initials: 'נש',
+      avatarBg: 'linear-gradient(155deg, #B8935A, #6B1F2A)',
       areas: ['חיפה', 'קריית אתא', 'טירת כרמל', 'עכו', 'נהריה']
     }
   ];
@@ -129,9 +137,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
     providerList.innerHTML = matches.map(function (p) {
       return '<div class="provider-card" data-provider="' + p.id + '" onclick="selectProvider(' + p.id + ')">' +
+        '<div class="provider-avatar" style="background:' + p.avatarBg + ';">' + p.initials + '</div>' +
+        '<div class="provider-info">' +
         '<div class="provider-name">' + p.name + '</div>' +
         '<div class="provider-spec">' + p.spec + '</div>' +
         '<div class="provider-area">' + typedArea + '</div>' +
+        '</div>' +
         '</div>';
     }).join('');
 
