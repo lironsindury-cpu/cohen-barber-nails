@@ -63,14 +63,83 @@ document.addEventListener('DOMContentLoaded', function () {
     return age;
   }
 
-  var PROVIDERS = {
-    1: { name: 'יוסי כהן', phone: '0501234567' },
-    2: { name: 'מאיה לוי', phone: '0507654321' },
-    3: { name: 'רון אזולאי', phone: '0521112233' },
-    4: { name: 'נועה שרון', phone: '0534445566' }
-  };
+  var PROVIDERS_LIST = [
+    {
+      id: 1,
+      name: 'יוסי כהן',
+      spec: 'פייד ותער · גברים',
+      phone: '0501234567',
+      areas: ['חיפה', 'קריית ים', 'קריית מוצקין', 'קריית ביאליק', 'קריית אתא', 'טירת כרמל', 'נשר']
+    },
+    {
+      id: 2,
+      name: 'מאיה לוי',
+      spec: 'מניקור ופדיקור',
+      phone: '0507654321',
+      areas: ['תל אביב-יפו', 'רמת גן', 'גבעתיים', 'בני ברק', 'חולון', 'בת ים', 'ראשון לציון', 'אשדוד', 'רחובות', 'הרצליה']
+    },
+    {
+      id: 3,
+      name: 'רון אזולאי',
+      spec: 'תספורת + עיצוב זקן',
+      phone: '0521112233',
+      areas: ['ירושלים', 'מבשרת ציון', 'בית שמש', 'מעלה אדומים', 'אבו גוש']
+    },
+    {
+      id: 4,
+      name: 'נועה שרון',
+      spec: "לק ג'ל ועיצוב ציפורניים",
+      phone: '0534445566',
+      areas: ['חיפה', 'קריית אתא', 'טירת כרמל', 'עכו', 'נהריה']
+    }
+  ];
 
   var selectedProviderId = null;
+  var providerList = document.getElementById('providerList');
+  var providerHint = document.getElementById('providerHint');
+  var areaInput = document.getElementById('area');
+
+  function getProviderById(id) {
+    for (var i = 0; i < PROVIDERS_LIST.length; i++) {
+      if (PROVIDERS_LIST[i].id === id) return PROVIDERS_LIST[i];
+    }
+    return null;
+  }
+
+  function renderProviders() {
+    if (!providerList) return;
+    var typedArea = areaInput ? areaInput.value.trim() : '';
+
+    if (!typedArea) {
+      providerList.innerHTML = '<div class="provider-prompt">בחרו יישוב למעלה כדי לראות ספרים וקוסמטיקאיות זמינים אצלכם</div>';
+      selectedProviderId = null;
+      if (providerHint) providerHint.textContent = 'כרגע אלה ספרים לדוגמה. ספרים אמיתיים שיצטרפו לרשת יופיעו כאן, לפי האזור שבחרתם למעלה.';
+      return;
+    }
+
+    var matches = PROVIDERS_LIST.filter(function (p) {
+      return p.areas.indexOf(typedArea) !== -1;
+    });
+
+    if (matches.length === 0) {
+      providerList.innerHTML = '<div class="provider-empty">עדיין אין לנו ספר/ית פעיל/ה ב-' + typedArea + '. השאירו פרטים למטה ונחזור אליכם ברגע שמישהו מצטרף לרשת באזור שלכם.</div>';
+      selectedProviderId = null;
+      return;
+    }
+
+    providerList.innerHTML = matches.map(function (p) {
+      return '<div class="provider-card" data-provider="' + p.id + '" onclick="selectProvider(' + p.id + ')">' +
+        '<div class="provider-name">' + p.name + '</div>' +
+        '<div class="provider-spec">' + p.spec + '</div>' +
+        '<div class="provider-area">' + typedArea + '</div>' +
+        '</div>';
+    }).join('');
+
+    // אם הספר/ית שהיו בחורים כבר לא ברשימה המסוננת - מבטלים את הבחירה
+    if (selectedProviderId && matches.indexOf(getProviderById(selectedProviderId)) === -1) {
+      selectedProviderId = null;
+    }
+  }
 
   window.selectProvider = function (id) {
     selectedProviderId = id;
@@ -79,6 +148,11 @@ document.addEventListener('DOMContentLoaded', function () {
       cards[i].classList.toggle('selected', Number(cards[i].getAttribute('data-provider')) === id);
     }
   };
+
+  if (areaInput) {
+    areaInput.addEventListener('input', renderProviders);
+    renderProviders();
+  }
 
   var bookingForm = document.getElementById('bookingForm');
   var paymentPanel = document.getElementById('paymentPanel');
@@ -100,7 +174,7 @@ document.addEventListener('DOMContentLoaded', function () {
       }
 
       if (!selectedProviderId) {
-        alert('נא לבחור ספר/ית');
+        alert('נא לבחור ספר/ית מהרשימה שמופיעה לפי האזור שבחרתם');
         return;
       }
 
@@ -125,7 +199,7 @@ document.addEventListener('DOMContentLoaded', function () {
         return;
       }
 
-      var provider = PROVIDERS[selectedProviderId];
+      var provider = getProviderById(selectedProviderId);
 
       document.getElementById('paymentProviderName').textContent = ' ' + provider.name;
       // קישורים לדוגמה בלבד - יוחלפו בקישור התשלום האישי האמיתי של כל ספר/ית מ-Bit / PayBox

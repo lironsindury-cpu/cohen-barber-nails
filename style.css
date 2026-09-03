@@ -429,6 +429,16 @@ a{ color: inherit; }
   font-weight: 500;
 }
 
+.provider-empty,
+.provider-prompt{
+  grid-column: 1 / -1;
+  font-size: 13px;
+  color: #6B6055;
+  padding: 14px;
+  border: 1px dashed var(--hairline);
+  text-align: center;
+}
+
 /* ---------- payment panel ---------- */
 .payment-panel{
   display: none;
