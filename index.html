@@ -23,6 +23,7 @@
       <a href="#services">שירותים</a>
       <a href="#work">העבודות שלנו</a>
       <a href="#about">אודות</a>
+      <a href="#join" class="nav-join">ספרים - הצטרפו אלינו</a>
       <a href="#booking" class="nav-cta">קביעת תור</a>
     </nav>
   </div>
@@ -162,6 +163,58 @@
 </section>
 
 <!-- ============ BOOKING FORM ============ -->
+<!-- ============ JOIN AS PROVIDER ============ -->
+<section class="join" id="join">
+  <div class="stripe-accent stripe-accent-work"></div>
+  <div class="container">
+    <div class="section-head section-head-light">
+      <h2>ספר/ית או קוסמטיקאית? הצטרפו אלינו</h2>
+      <p>אתם עובדים באזור שלכם, אנחנו מביאים לכם לקוחות. בלי עמלות גבוהות, התשלום עובר ישירות אליכם.</p>
+    </div>
+
+    <div class="join-panel">
+      <form class="join-form" id="joinForm">
+        <div class="form-row">
+          <label for="joinName">שם מלא</label>
+          <input type="text" id="joinName" name="joinName" placeholder="ישראל ישראלי" required>
+        </div>
+
+        <div class="form-row">
+          <label for="joinPhone">טלפון</label>
+          <input type="tel" id="joinPhone" name="joinPhone" placeholder="050-0000000" required>
+        </div>
+
+        <div class="form-row">
+          <label for="joinEmail">אימייל</label>
+          <input type="email" id="joinEmail" name="joinEmail" placeholder="you@example.com">
+        </div>
+
+        <div class="form-row">
+          <label for="joinProfession">תחום עיסוק</label>
+          <select id="joinProfession" name="joinProfession" required>
+            <option value="">-- בחרו תחום --</option>
+            <option value="barber">ספר/ית</option>
+            <option value="cosmetic">קוסמטיקאית</option>
+            <option value="nails">מניקור / פדיקור</option>
+          </select>
+        </div>
+
+        <div class="form-row">
+          <label for="joinArea">באילו אזורים תרצו לעבוד?</label>
+          <input type="text" id="joinArea" name="joinArea" list="areaOptions" placeholder="התחילו להקליד שם יישוב..." autocomplete="off" required>
+        </div>
+
+        <div class="form-row">
+          <label for="joinServices">אילו שירותים אתם נותנים? (אופציונלי)</label>
+          <textarea id="joinServices" name="joinServices" rows="3" placeholder="לדוגמה: תספורת גברים 80 ₪, תספורת + זקן 110 ₪"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary join-submit">שליחת פרטים להצטרפות</button>
+      </form>
+    </div>
+  </div>
+</section>
+
 <section class="booking" id="booking">
   <div class="container">
     <div class="booking-panel">

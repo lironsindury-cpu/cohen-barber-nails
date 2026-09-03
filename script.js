@@ -350,4 +350,25 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
+  // טופס הצטרפות ספרים/קוסמטיקאיות לרשת
+  var joinForm = document.getElementById('joinForm');
+  if (joinForm) {
+    joinForm.addEventListener('submit', function (event) {
+      event.preventDefault();
+
+      var name = document.getElementById('joinName').value.trim();
+      var phone = document.getElementById('joinPhone').value.trim();
+      var profession = document.getElementById('joinProfession').value;
+      var area = document.getElementById('joinArea').value.trim();
+
+      if (!name || !phone || !profession || !area) {
+        alert('נא למלא שם, טלפון, תחום עיסוק ואזור עבודה');
+        return;
+      }
+
+      alert('תודה ' + name + '! קיבלנו את הפרטים שלך ונחזור אליך בקרוב כדי להצטרף לרשת.');
+      joinForm.reset();
+    });
+  }
+
 });
