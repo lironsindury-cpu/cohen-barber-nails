@@ -71,6 +71,7 @@ document.addEventListener('DOMContentLoaded', function () {
       phone: '0501234567',
       initials: 'יכ',
       avatarBg: 'linear-gradient(155deg, #B8935A, #8C6A3C)',
+      services: ['haircut', 'haircut-beard', 'shave', 'kids'],
       areas: ['חיפה', 'קריית ים', 'קריית מוצקין', 'קריית ביאליק', 'קריית אתא', 'טירת כרמל', 'נשר']
     },
     {
@@ -80,6 +81,7 @@ document.addEventListener('DOMContentLoaded', function () {
       phone: '0507654321',
       initials: 'מל',
       avatarBg: 'linear-gradient(155deg, #8A2C39, #6B1F2A)',
+      services: ['manicure', 'pedicure', 'gel'],
       areas: ['תל אביב-יפו', 'רמת גן', 'גבעתיים', 'בני ברק', 'חולון', 'בת ים', 'ראשון לציון', 'אשדוד', 'רחובות', 'הרצליה']
     },
     {
@@ -89,6 +91,7 @@ document.addEventListener('DOMContentLoaded', function () {
       phone: '0521112233',
       initials: 'רא',
       avatarBg: 'linear-gradient(155deg, #3A2F25, #211B16)',
+      services: ['haircut', 'haircut-beard', 'shave'],
       areas: ['ירושלים', 'מבשרת ציון', 'בית שמש', 'מעלה אדומים', 'אבו גוש']
     },
     {
@@ -98,14 +101,26 @@ document.addEventListener('DOMContentLoaded', function () {
       phone: '0534445566',
       initials: 'נש',
       avatarBg: 'linear-gradient(155deg, #B8935A, #6B1F2A)',
+      services: ['manicure', 'pedicure', 'gel'],
       areas: ['חיפה', 'קריית אתא', 'טירת כרמל', 'עכו', 'נהריה']
     }
   ];
+
+  var SERVICE_LABELS = {
+    haircut: 'תספורת גברים',
+    'haircut-beard': 'תספורת + עיצוב זקן',
+    shave: 'גילוח קלאסי בתער',
+    kids: 'תספורת ילדים',
+    manicure: 'מניקור',
+    pedicure: 'פדיקור',
+    gel: "לק ג'ל"
+  };
 
   var selectedProviderId = null;
   var providerList = document.getElementById('providerList');
   var providerHint = document.getElementById('providerHint');
   var areaInput = document.getElementById('area');
+  var serviceSelect = document.getElementById('service');
 
   function getProviderById(id) {
     for (var i = 0; i < PROVIDERS_LIST.length; i++) {
@@ -117,20 +132,28 @@ document.addEventListener('DOMContentLoaded', function () {
   function renderProviders() {
     if (!providerList) return;
     var typedArea = areaInput ? areaInput.value.trim() : '';
+    var selectedService = serviceSelect ? serviceSelect.value : '';
 
     if (!typedArea) {
       providerList.innerHTML = '<div class="provider-prompt">בחרו יישוב למעלה כדי לראות ספרים וקוסמטיקאיות זמינים אצלכם</div>';
       selectedProviderId = null;
-      if (providerHint) providerHint.textContent = 'כרגע אלה ספרים לדוגמה. ספרים אמיתיים שיצטרפו לרשת יופיעו כאן, לפי האזור שבחרתם למעלה.';
+      if (providerHint) providerHint.textContent = 'כרגע אלה ספרים לדוגמה. ספרים אמיתיים שיצטרפו לרשת יופיעו כאן, לפי האזור והשירות שבחרתם למעלה.';
+      return;
+    }
+
+    if (!selectedService) {
+      providerList.innerHTML = '<div class="provider-prompt">בחרו שירות למעלה כדי לראות מי מתאים/ה לבקשה שלכם</div>';
+      selectedProviderId = null;
       return;
     }
 
     var matches = PROVIDERS_LIST.filter(function (p) {
-      return p.areas.indexOf(typedArea) !== -1;
+      return p.areas.indexOf(typedArea) !== -1 && p.services.indexOf(selectedService) !== -1;
     });
 
     if (matches.length === 0) {
-      providerList.innerHTML = '<div class="provider-empty">עדיין אין לנו ספר/ית פעיל/ה ב-' + typedArea + '. השאירו פרטים למטה ונחזור אליכם ברגע שמישהו מצטרף לרשת באזור שלכם.</div>';
+      var serviceLabel = SERVICE_LABELS[selectedService] || 'השירות שבחרתם';
+      providerList.innerHTML = '<div class="provider-empty">עדיין אין לנו ספר/ית שנותנ/ת "' + serviceLabel + '" ב-' + typedArea + '. השאירו פרטים למטה ונחזור אליכם ברגע שמישהו מצטרף לרשת באזור שלכם.</div>';
       selectedProviderId = null;
       return;
     }
@@ -162,8 +185,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
   if (areaInput) {
     areaInput.addEventListener('input', renderProviders);
-    renderProviders();
   }
+  if (serviceSelect) {
+    serviceSelect.addEventListener('change', renderProviders);
+  }
+  renderProviders();
 
   var bookingForm = document.getElementById('bookingForm');
   var paymentPanel = document.getElementById('paymentPanel');
