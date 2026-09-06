@@ -3,6 +3,35 @@
 
 document.addEventListener('DOMContentLoaded', function () {
 
+  // צל עדין להדר כשגוללים למטה
+  var siteHeader = document.querySelector('.site-header');
+  if (siteHeader) {
+    window.addEventListener('scroll', function () {
+      siteHeader.classList.toggle('scrolled', window.scrollY > 12);
+    });
+  }
+
+  // אלמנטים "עולים" בעדינות כשנכנסים לתצוגה בגלילה
+  var revealEls = document.querySelectorAll('.reveal');
+  if (revealEls.length && 'IntersectionObserver' in window) {
+    var revealObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+
+    revealEls.forEach(function (el) {
+      revealObserver.observe(el);
+    });
+  } else {
+    revealEls.forEach(function (el) {
+      el.classList.add('is-visible');
+    });
+  }
+
   var menuToggle = document.getElementById('menuToggle');
   var mainNav = document.getElementById('mainNav');
 
