@@ -622,9 +622,31 @@ font-size: 26px;
 line-height: 1;
 }
 
-.work-tile-brass{ background: linear-gradient(155deg, var(--brass), var(--brass-deep)); color: var(--charcoal); }
-.work-tile-burgundy{ background: linear-gradient(155deg, #8A2C39, var(--burgundy)); }
-.work-tile-ivory{ background: linear-gradient(155deg, #3A2F25, var(--charcoal-soft)); }
+.work-tile-brass{ background: linear-gradient(155deg, var(--brass), var(--brass-deep)); border-top: 3px solid var(--brass); }
+.work-tile-burgundy{ background: linear-gradient(155deg, #8A2C39, var(--burgundy)); border-top: 3px solid var(--burgundy); }
+.work-tile-ivory{ background: linear-gradient(155deg, #3A2F25, var(--charcoal-soft)); border-top: 3px solid var(--ivory); }
+
+.work-tile-img{
+position: absolute;
+inset: 0;
+width: 100%;
+height: 100%;
+object-fit: cover;
+z-index: 0;
+transition: transform .5s ease;
+}
+.work-tile:hover .work-tile-img{ transform: scale(1.08); }
+.work-tile-overlay{
+position: absolute;
+inset: 0;
+background: linear-gradient(180deg, rgba(26,22,18,0) 35%, rgba(26,22,18,0.88) 100%);
+z-index: 1;
+}
+.work-tile-icon,
+.work-tile > span:not(.work-tile-icon){
+position: relative;
+z-index: 2;
+}
 
 /* ---------- about ---------- */
 .about{
