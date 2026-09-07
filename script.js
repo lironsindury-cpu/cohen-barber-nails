@@ -404,10 +404,16 @@ document.addEventListener('DOMContentLoaded', function () {
       var phone = document.getElementById('joinPhone').value.trim();
       var profession = document.getElementById('joinProfession').value;
       var area = document.getElementById('joinArea').value.trim();
-      var address = document.getElementById('joinAddress').value.trim();
+            var address = document.getElementById('joinAddress').value.trim();
+      var agree = document.getElementById('joinAgree') ? document.getElementById('joinAgree').checked : false;
 
       if (!name || !phone || !profession || !area || !address) {
         alert('נא למלא שם, טלפון, תחום עיסוק, אזור עבודה וכתובת מגורים מדויקת');
+        return;
+      }
+
+      if (!agree) {
+        alert('יש לאשר את תנאי הסכם העמלה וההצטרפות לרשת לפני שליחת הטופס');
         return;
       }
 
@@ -427,12 +433,43 @@ document.addEventListener('DOMContentLoaded', function () {
         return;
       }
 
-      alert('תודה ' + name + '! קיבלנו את הפרטים שלך ונחזור אליך בקרוב כדי להצטרף לרשת.');
-      joinForm.reset();
-      joinSvcChecks.forEach(function (chk) {
-        var priceInput = chk.closest('.join-service-item').querySelector('.join-svc-price');
-        if (priceInput) { priceInput.disabled = true; }
-      });
+      var email = document.getElementById('joinEmail') ? document.getElementById('joinEmail').value.trim() : '';
+      var submitBtn = joinForm.querySelector('.join-submit');
+      if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'שולח...'; }
+
+      var payload = {
+        'שם מלא': name,
+        'טלפון': phone,
+        'אימייל נותן השירות': email || 'לא צויין',
+        'תחום עיסוק': profession,
+        'אזור עבודה': area,
+        'כתובת מגורים מדויקת': address,
+        'שירותים ומחירים': servicePrices.join(' | '),
+        'אישר תנאי הסכם עמלה 5%': agree ? 'כן' : 'לא',
+        '_subject': 'הצטרפות חדשה לרשת - ' + name,
+        '_captcha': 'false',
+        '_template': 'table'
+      };
+
+      fetch('https://formsubmit.co/ajax/levyadi46@gmail.com', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(payload)
+      })
+        .then(function () {
+          alert('תודה ' + name + '! קיבלנו את הפרטים שלך ונחזור אליך בקרוב כדי להצטרף לרשת.');
+          joinForm.reset();
+          joinSvcChecks.forEach(function (chk) {
+            var priceInput = chk.closest('.join-service-item').querySelector('.join-svc-price');
+            if (priceInput) { priceInput.disabled = true; }
+          });
+        })
+        .catch(function () {
+          alert('אירעה שגיאה בשליחת הטופס. אנא נסו שוב או צרו קשר בטלפון.');
+        })
+        .finally(function () {
+          if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'שליחת פרטים להצטרפות'; }
+        });
     });
   }
 
