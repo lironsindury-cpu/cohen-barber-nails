@@ -381,7 +381,22 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // טופס הצטרפות ספרים/קוסמטיקאיות לרשת
   var joinForm = document.getElementById('joinForm');
-  if (joinForm) {
+    if (joinForm) {
+    var joinSvcChecks = document.querySelectorAll('.join-svc-check');
+    joinSvcChecks.forEach(function (chk) {
+      chk.addEventListener('change', function () {
+        var priceInput = chk.closest('.join-service-item').querySelector('.join-svc-price');
+        if (priceInput) {
+          priceInput.disabled = !chk.checked;
+          if (!chk.checked) {
+            priceInput.value = '';
+          } else {
+            priceInput.focus();
+          }
+        }
+      });
+    });
+
     joinForm.addEventListener('submit', function (event) {
       event.preventDefault();
 
@@ -389,14 +404,35 @@ document.addEventListener('DOMContentLoaded', function () {
       var phone = document.getElementById('joinPhone').value.trim();
       var profession = document.getElementById('joinProfession').value;
       var area = document.getElementById('joinArea').value.trim();
+      var address = document.getElementById('joinAddress').value.trim();
 
-      if (!name || !phone || !profession || !area) {
-        alert('נא למלא שם, טלפון, תחום עיסוק ואזור עבודה');
+      if (!name || !phone || !profession || !area || !address) {
+        alert('נא למלא שם, טלפון, תחום עיסוק, אזור עבודה וכתובת מגורים מדויקת');
+        return;
+      }
+
+      var servicePrices = [];
+      joinSvcChecks.forEach(function (chk) {
+        if (chk.checked) {
+          var priceInput = chk.closest('.join-service-item').querySelector('.join-svc-price');
+          var price = priceInput ? priceInput.value.trim() : '';
+          if (price) {
+            servicePrices.push(chk.getAttribute('data-service') + ': ' + price + ' ₪');
+          }
+        }
+      });
+
+      if (servicePrices.length === 0) {
+        alert('נא לסמן לפחות שירות אחד ולמלא את המחיר שלכם עבורו');
         return;
       }
 
       alert('תודה ' + name + '! קיבלנו את הפרטים שלך ונחזור אליך בקרוב כדי להצטרף לרשת.');
       joinForm.reset();
+      joinSvcChecks.forEach(function (chk) {
+        var priceInput = chk.closest('.join-service-item').querySelector('.join-svc-price');
+        if (priceInput) { priceInput.disabled = true; }
+      });
     });
   }
 

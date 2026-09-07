@@ -279,13 +279,48 @@
   </div>
 
   <div class="form-row">
-  <label for="joinArea">באילו אזורים תרצו לעבוד?</label>
+<label for="joinArea">באילו אזורים תרצו לעבוד?</label>
   <input type="text" id="joinArea" name="joinArea" list="areaOptions" placeholder="התחילו להקליד שם יישוב..." autocomplete="off" required>
   </div>
 
   <div class="form-row">
-  <label for="joinServices">אילו שירותים אתם נותנים? (אופציונלי)</label>
-  <textarea id="joinServices" name="joinServices" rows="3" placeholder="לדוגמה: תספורת גברים 80 ₪, תספורת + זקן 110 ₪"></textarea>
+  <label for="joinAddress">כתובת מגורים מדויקת</label>
+  <input type="text" id="joinAddress" name="joinAddress" placeholder="רחוב, מספר בית ועיר" autocomplete="off" required>
+  <span class="join-address-hint">נא לציין כתובת מדויקת (רחוב ומספר) ולא רק שם יישוב</span>
+  </div>
+
+  <div class="form-row join-services-row">
+  <label>המחירים שלכם לכל שירות (סמנו ומלאו מחיר לכל שירות שאתם נותנים)</label>
+  <div class="join-services-grid" id="joinServicesGrid">
+  <div class="join-service-item">
+  <label class="join-service-check"><input type="checkbox" class="join-svc-check" data-service="תספורת גברים">תספורת גברים</label>
+  <div class="join-service-price"><span>₪</span><input type="number" min="0" step="1" class="join-svc-price" placeholder="0" disabled></div>
+  </div>
+  <div class="join-service-item">
+  <label class="join-service-check"><input type="checkbox" class="join-svc-check" data-service="תספורת + עיצוב זקן">תספורת + עיצוב זקן</label>
+  <div class="join-service-price"><span>₪</span><input type="number" min="0" step="1" class="join-svc-price" placeholder="0" disabled></div>
+  </div>
+  <div class="join-service-item">
+  <label class="join-service-check"><input type="checkbox" class="join-svc-check" data-service="גילוח קלאסי בתער">גילוח קלאסי בתער</label>
+  <div class="join-service-price"><span>₪</span><input type="number" min="0" step="1" class="join-svc-price" placeholder="0" disabled></div>
+  </div>
+  <div class="join-service-item">
+  <label class="join-service-check"><input type="checkbox" class="join-svc-check" data-service="תספורת ילדים">תספורת ילדים</label>
+  <div class="join-service-price"><span>₪</span><input type="number" min="0" step="1" class="join-svc-price" placeholder="0" disabled></div>
+  </div>
+  <div class="join-service-item">
+  <label class="join-service-check"><input type="checkbox" class="join-svc-check" data-service="מניקור">מניקור</label>
+  <div class="join-service-price"><span>₪</span><input type="number" min="0" step="1" class="join-svc-price" placeholder="0" disabled></div>
+  </div>
+  <div class="join-service-item">
+  <label class="join-service-check"><input type="checkbox" class="join-svc-check" data-service="פדיקור">פדיקור</label>
+  <div class="join-service-price"><span>₪</span><input type="number" min="0" step="1" class="join-svc-price" placeholder="0" disabled></div>
+  </div>
+  <div class="join-service-item">
+  <label class="join-service-check"><input type="checkbox" class="join-svc-check" data-service="לק ג'ל">לק ג'ל</label>
+  <div class="join-service-price"><span>₪</span><input type="number" min="0" step="1" class="join-svc-price" placeholder="0" disabled></div>
+  </div>
+  </div>
   </div>
 
   <button type="submit" class="btn btn-primary join-submit">שליחת פרטים להצטרפות</button>
@@ -629,4 +664,4 @@
   <script src="script.js"></script>
   </body>
   </html>
-  
+
