@@ -99,7 +99,7 @@ document.addEventListener('DOMContentLoaded', function () {
       spec: 'פייד ותער · גברים',
       phone: '0501234567',
       initials: 'יכ',
-      email: 'provider1@example.com',
+      email: 'yossi.cohen@cohen-barber-nails.com',
       avatarBg: 'linear-gradient(155deg, #B8935A, #8C6A3C)',
       services: ['haircut', 'haircut-beard', 'shave', 'kids'],
       areas: ['חיפה', 'קריית ים', 'קריית מוצקין', 'קריית ביאליק', 'קריית אתא', 'טירת כרמל', 'נשר']
@@ -110,7 +110,7 @@ document.addEventListener('DOMContentLoaded', function () {
       spec: 'מניקור ופדיקור',
       phone: '0507654321',
       initials: 'מל',
-      email: 'provider2@example.com',
+      email: 'maya.levi@cohen-barber-nails.com',
       avatarBg: 'linear-gradient(155deg, #8A2C39, #6B1F2A)',
       services: ['manicure', 'pedicure', 'gel'],
       areas: ['תל אביב-יפו', 'רמת גן', 'גבעתיים', 'בני ברק', 'חולון', 'בת ים', 'ראשון לציון', 'אשדוד', 'רחובות', 'הרצליה']
@@ -121,7 +121,7 @@ document.addEventListener('DOMContentLoaded', function () {
       spec: 'תספורת + עיצוב זקן',
       phone: '0521112233',
       initials: 'רא',
-      email: 'provider3@example.com',
+      email: 'ron.azulai@cohen-barber-nails.com',
       avatarBg: 'linear-gradient(155deg, #3A2F25, #211B16)',
       services: ['haircut', 'haircut-beard', 'shave'],
       areas: ['ירושלים', 'מבשרת ציון', 'בית שמש', 'מעלה אדומים', 'אבו גוש']
@@ -132,7 +132,7 @@ document.addEventListener('DOMContentLoaded', function () {
       spec: "לק ג'ל ועיצוב ציפורניים",
       phone: '0534445566',
       initials: 'נש',
-      email: 'provider4@example.com',
+      email: 'noa.sharon@cohen-barber-nails.com',
       avatarBg: 'linear-gradient(155deg, #B8935A, #6B1F2A)',
       services: ['manicure', 'pedicure', 'gel'],
       areas: ['חיפה', 'קריית אתא', 'טירת כרמל', 'עכו', 'נהריה']
@@ -271,7 +271,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
       var provider = getProviderById(selectedProviderId);
       var customerPhone = document.getElementById('phone') ? document.getElementById('phone').value.trim() : '';
-        var customerEmail = document.getElementById('customerEmail') ? document.getElementById('customerEmail').value.trim() : '';
+          var customerEmail = document.getElementById('customerEmail') ? document.getElementById('customerEmail').value.trim() : '';
 
       var bookingDetails = {
         service: SERVICE_LABELS[service] || service,
