@@ -271,11 +271,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
       var provider = getProviderById(selectedProviderId);
       var customerPhone = document.getElementById('phone') ? document.getElementById('phone').value.trim() : '';
+        var customerEmail = document.getElementById('customerEmail') ? document.getElementById('customerEmail').value.trim() : '';
 
       var bookingDetails = {
         service: SERVICE_LABELS[service] || service,
         area: area,
         customerName: name,
+        customerEmail: customerEmail,
         customerPhone: customerPhone,
         date: date,
         time: time
@@ -283,6 +285,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
       saveBookingForProvider(provider, bookingDetails);
       notifyProviderByEmail(provider, bookingDetails);
+        sendCustomerConfirmationEmail(provider, bookingDetails);
 
 
       document.getElementById('paymentProviderName').textContent = ' ' + provider.name;
@@ -514,6 +517,21 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   })();
 
+  // אתחול EmailJS לשליחת מייל אישור אוטומטי ללקוחות (פועל רק אחרי הגדרת emailjs-config.js)
+  var emailjsReady = false;
+  (function initEmailJs() {
+    var cfg = window.emailjsConfig;
+    if (!cfg || cfg.publicKey === 'REPLACE_ME' || typeof emailjs === 'undefined') {
+      return;
+    }
+    try {
+      emailjs.init({ publicKey: cfg.publicKey });
+      emailjsReady = true;
+    } catch (e) {
+      emailjsReady = false;
+    }
+})();
+
   // שמירת תור חדש ב-Firestore, משויך לספר/ית לפי האימייל שלו/ה
   function saveBookingForProvider(provider, details) {
     if (!firebaseReady || !provider || !provider.email) return;
@@ -556,6 +574,26 @@ document.addEventListener('DOMContentLoaded', function () {
       body: JSON.stringify(payload)
     }).catch(function (err) {
       console.error('שגיאה בשליחת הודעת אימייל לספר/ית:', err);
+    });
+  }
+
+  // שליחת מייל אישור אוטומטי ללקוח/ה שקבעו תור (פועל רק אחרי הגדרת emailjs-config.js)
+  function sendCustomerConfirmationEmail(provider, details) {
+    if (!emailjsReady || !details.customerEmail) return;
+
+    var cfg = window.emailjsConfig;
+    var templateParams = {
+      to_email: details.customerEmail,
+      customer_name: details.customerName,
+      service_name: details.service,
+      provider_name: provider ? provider.name : '',
+      booking_date: details.date,
+      booking_time: details.time,
+      area: details.area
+    };
+
+    emailjs.send(cfg.serviceId, cfg.templateId, templateParams).catch(function (err) {
+      console.error('שגיאה בשליחת מייל אישור ללקוח/ה:', err);
     });
   }
 

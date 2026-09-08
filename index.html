@@ -600,6 +600,11 @@
   <input type="tel" id="phone" name="phone" placeholder="050-0000000" required>
   </div>
 
+  <div class="form-row">
+  <label for="customerEmail">אימייל (לקבלת אישור התור במייל)</label>
+  <input type="email" id="customerEmail" name="customerEmail" placeholder="name@example.com" required>
+  </div>
+
   <button type="submit" class="btn btn-primary booking-submit">קביעת תור</button>
   </form>
 
@@ -723,6 +728,8 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
   <script src="firebase-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script src="emailjs-config.js"></script>
     <script src="script.js"></script>
   </body>
   </html>
