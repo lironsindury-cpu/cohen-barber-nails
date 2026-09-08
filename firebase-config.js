@@ -34,10 +34,10 @@
 //
 // עד שהערכים למטה לא יוחלפו, אזור ההתחברות באתר יציג הודעה שהמערכת בהקמה.
 window.firebaseConfig = {
-  apiKey: "REPLACE_ME",
-  authDomain: "REPLACE_ME.firebaseapp.com",
-  projectId: "REPLACE_ME",
-  storageBucket: "REPLACE_ME.appspot.com",
-  messagingSenderId: "REPLACE_ME",
-  appId: "REPLACE_ME"
+  apiKey: "AIzaSyC_QoR6IPDfBmeOWlhYfWsWIwgOxWdN-10",
+  authDomain: "cohen-barber-nails.firebaseapp.com",
+  projectId: "cohen-barber-nails",
+  storageBucket: "cohen-barber-nails.firebasestorage.app",
+  messagingSenderId: "707455536443",
+  appId: "1:707455536443:web:5e37c924a15c9bb1647b1e"
 };
