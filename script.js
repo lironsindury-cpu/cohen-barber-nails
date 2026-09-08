@@ -272,14 +272,17 @@ document.addEventListener('DOMContentLoaded', function () {
       var provider = getProviderById(selectedProviderId);
       var customerPhone = document.getElementById('phone') ? document.getElementById('phone').value.trim() : '';
 
-      saveBookingForProvider(provider, {
+      var bookingDetails = {
         service: SERVICE_LABELS[service] || service,
         area: area,
         customerName: name,
         customerPhone: customerPhone,
         date: date,
         time: time
-      });
+      };
+
+      saveBookingForProvider(provider, bookingDetails);
+      notifyProviderByEmail(provider, bookingDetails);
 
 
       document.getElementById('paymentProviderName').textContent = ' ' + provider.name;
@@ -527,6 +530,32 @@ document.addEventListener('DOMContentLoaded', function () {
       createdAt: firebase.firestore.FieldValue.serverTimestamp()
     }).catch(function (err) {
       console.error('שגיאה בשמירת התור ביומן:', err);
+    });
+  }
+
+  // שליחת אימייל לספר/ית ברגע שהלקוח קבע תור והגיע למסך התשלום
+  function notifyProviderByEmail(provider, details) {
+    if (!provider || !provider.email) return;
+
+    var payload = {
+      'שם הספר/ית': provider.name,
+      'שירות': details.service,
+      'תאריך': details.date,
+      'שעה': details.time,
+      'אזור': details.area,
+      'שם הלקוח/ה': details.customerName,
+      'טלפון הלקוח/ה': details.customerPhone,
+      '_subject': 'תור חדש - ' + details.date + ' ' + details.time + ' - ' + details.customerName,
+      '_captcha': 'false',
+      '_template': 'table'
+    };
+
+    fetch('https://formsubmit.co/ajax/' + encodeURIComponent(provider.email), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(payload)
+    }).catch(function (err) {
+      console.error('שגיאה בשליחת הודעת אימייל לספר/ית:', err);
     });
   }
 

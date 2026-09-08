@@ -879,6 +879,13 @@ flex: 1;
 max-width: 220px;
 }
 
+.payment-cancellation-notice{
+font-size: 13px;
+font-weight: 600;
+color: var(--burgundy);
+margin-bottom: 10px;
+}
+
 /* ---------- custom calendar popup ---------- */
 .date-field-wrap{
 position: relative;
