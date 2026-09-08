@@ -26,6 +26,7 @@
   <a href="#work">העבודות שלנו</a>
   <a href="#about">אודות</a>
   <a href="#join" class="nav-join">ספרים - הצטרפו אלינו</a>
+  <a href="#provider-area" class="nav-login">ספרים - כניסה</a>
   <a href="#booking" class="nav-cta">קביעת תור</a>
   </nav>
   </div>
@@ -615,6 +616,68 @@
   </div>
   </section>
 
+  <!-- ============ PROVIDER AREA - LOGIN + CALENDAR ============ -->
+  <section class="provider-area" id="provider-area">
+  <div class="container">
+  <div class="provider-panel reveal">
+
+  <div class="provider-login-box" id="providerLoginBox">
+  <div class="section-head">
+  <p class="eyebrow">אזור אישי</p>
+  <h2>כניסת ספרים וקוסמטיקאיות</h2>
+  <p>התחברו כדי לראות את כל התורים שנקבעו לכם, מסודרים בלוח שנה אישי.</p>
+  </div>
+  <form class="provider-login-form" id="providerLoginForm">
+  <div class="form-row">
+  <label for="providerEmail">אימייל</label>
+  <input type="email" id="providerEmail" name="providerEmail" placeholder="you@example.com" autocomplete="username" required>
+  </div>
+  <div class="form-row">
+  <label for="providerPassword">סיסמה</label>
+  <input type="password" id="providerPassword" name="providerPassword" placeholder="הסיסמה שקיבלתם מבעל/ת הרשת" autocomplete="current-password" required>
+  </div>
+  <p class="provider-login-error" id="providerLoginError"></p>
+  <button type="submit" class="btn btn-primary provider-login-submit" id="providerLoginSubmit">התחברות</button>
+  <p class="field-hint">אין לכם עדיין פרטי התחברות? השאירו פרטים ב<a href="#join">טופס ההצטרפות</a> ותקבלו אימייל וסיסמה אישיים.</p>
+  <p class="provider-config-warning" id="providerConfigWarning">מערכת ההתחברות בהקמה - חזרו לבדוק בקרוב.</p>
+  </form>
+  </div>
+
+  <div class="provider-dashboard" id="providerDashboard" hidden>
+  <div class="provider-dashboard-head">
+  <div>
+  <p class="eyebrow">שלום,</p>
+  <h2 id="providerDashboardName">ספר/ית יקר/ה</h2>
+  </div>
+  <button type="button" class="btn btn-outline provider-logout" id="providerLogoutBtn">התנתקות</button>
+  </div>
+
+  <div class="provider-cal-wrap">
+  <div class="calendar-popup provider-calendar" id="providerCalendar">
+  <div class="cal-header">
+  <button type="button" id="providerCalNext" aria-label="חודש הבא">&#8249;</button>
+  <span id="providerCalMonthLabel">ספטמבר 2026</span>
+  <button type="button" id="providerCalPrev" aria-label="חודש קודם">&#8250;</button>
+  </div>
+  <div class="cal-weekdays">
+  <span>א</span><span>ב</span><span>ג</span><span>ד</span><span>ה</span><span>ו</span><span>ש</span>
+  </div>
+  <div class="cal-days" id="providerCalDays"></div>
+  </div>
+
+  <div class="provider-appointments">
+  <h3 id="providerAppointmentsTitle">התורים שלכם</h3>
+  <div class="provider-appointments-list" id="providerAppointmentsList">
+  <p class="provider-appointments-empty">בחרו יום בלוח כדי לראות תורים, או גללו למטה לרשימה המלאה.</p>
+  </div>
+  </div>
+  </div>
+  </div>
+
+  </div>
+  </div>
+  </section>
+
   <!-- ============ FOOTER ============ -->
   <footer class="site-footer">
   <div class="container footer-grid">
@@ -655,7 +718,11 @@
   </div>
   </footer>
 
-  <script src="script.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+  <script src="firebase-config.js"></script>
+    <script src="script.js"></script>
   </body>
   </html>
 

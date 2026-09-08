@@ -1268,3 +1268,192 @@ accent-color: var(--brass-deep);
 cursor: pointer;
 flex-shrink: 0;
 }
+
+/* ---------- provider area: login + personal calendar ---------- */
+.nav-login{
+color: var(--brass-deep) !important;
+font-weight: 700 !important;
+}
+
+.provider-area{
+background: var(--charcoal);
+padding: 82px 0 86px;
+position: relative;
+}
+
+.provider-panel{
+max-width: 640px;
+margin: 0 auto;
+background: var(--charcoal-soft);
+border: 1px solid #453A2F;
+padding: 44px;
+}
+
+.provider-panel .section-head{
+max-width: none;
+text-align: center;
+margin-left: auto;
+margin-right: auto;
+}
+.provider-panel .eyebrow{
+justify-content: center;
+}
+
+.provider-login-form .form-row label{
+color: var(--ivory);
+}
+.provider-login-form .field-hint{
+color: #B5A997;
+}
+.provider-login-form .field-hint a{
+color: var(--brass-deep);
+}
+
+.provider-login-error{
+color: #E2A6A6;
+font-size: 13px;
+margin: -8px 0 14px;
+min-height: 1em;
+}
+
+.provider-config-warning{
+display: none;
+font-size: 12.5px;
+color: #B5A997;
+text-align: center;
+margin-top: 14px;
+padding: 10px 12px;
+border: 1px dashed #453A2F;
+}
+
+.provider-login-submit{
+width: 100%;
+margin-top: 4px;
+margin-bottom: 16px;
+}
+
+.provider-dashboard-head{
+display: flex;
+align-items: center;
+justify-content: space-between;
+gap: 16px;
+margin-bottom: 28px;
+flex-wrap: wrap;
+}
+.provider-dashboard-head h2{
+color: var(--ivory);
+font-family: 'Frank Ruhl Libre', Georgia, serif;
+font-size: 24px;
+margin: 0;
+}
+.provider-dashboard-head .eyebrow{
+color: var(--brass-deep);
+}
+
+.provider-cal-wrap{
+display: grid;
+grid-template-columns: 320px 1fr;
+gap: 28px;
+align-items: start;
+}
+
+.provider-calendar{
+position: static;
+display: block;
+background: #FFFFFF;
+box-shadow: none;
+}
+
+.cal-day.cal-day-has-appt{
+position: relative;
+font-weight: 700;
+color: var(--brass-deep);
+}
+.cal-day.cal-day-has-appt::after{
+content: '';
+position: absolute;
+bottom: 2px;
+left: 50%;
+transform: translateX(-50%);
+width: 5px;
+height: 5px;
+border-radius: 50%;
+background: var(--burgundy);
+}
+.cal-day.cal-day-selected.cal-day-has-appt::after{
+background: var(--ivory);
+}
+
+.provider-appointments h3{
+color: var(--ivory);
+font-family: 'Frank Ruhl Libre', Georgia, serif;
+font-size: 17px;
+margin-bottom: 14px;
+}
+
+.provider-appointments-list{
+display: flex;
+flex-direction: column;
+gap: 12px;
+max-height: 420px;
+overflow-y: auto;
+}
+
+.provider-appointments-empty{
+font-size: 13px;
+color: #B5A997;
+padding: 14px;
+border: 1px dashed #453A2F;
+text-align: center;
+}
+
+.provider-appointment-card{
+background: var(--ivory);
+border: 1px solid var(--hairline);
+padding: 14px 16px;
+}
+.provider-appointment-time{
+font-family: 'Frank Ruhl Libre', Georgia, serif;
+font-size: 15px;
+color: var(--charcoal);
+margin-bottom: 4px;
+}
+.provider-appointment-service{
+font-size: 13.5px;
+color: var(--brass-deep);
+font-weight: 600;
+margin-bottom: 4px;
+}
+.provider-appointment-customer{
+font-size: 13px;
+color: #4A4139;
+margin-bottom: 2px;
+}
+.provider-appointment-area{
+font-size: 12px;
+color: #6B6055;
+margin-bottom: 8px;
+}
+.provider-appointment-gcal{
+display: inline-block;
+font-size: 12.5px;
+font-weight: 600;
+color: var(--burgundy);
+text-decoration: none;
+border-bottom: 1px solid var(--burgundy);
+}
+.provider-appointment-gcal:hover{
+color: var(--charcoal);
+border-bottom-color: var(--charcoal);
+}
+
+@media (max-width: 760px){
+.provider-cal-wrap{
+grid-template-columns: 1fr;
+}
+}
+
+@media (max-width: 520px){
+.provider-panel{ padding: 28px; }
+.provider-dashboard-head{ flex-direction: column; align-items: flex-start; }
+}

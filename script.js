@@ -99,6 +99,7 @@ document.addEventListener('DOMContentLoaded', function () {
       spec: 'פייד ותער · גברים',
       phone: '0501234567',
       initials: 'יכ',
+      email: 'provider1@example.com',
       avatarBg: 'linear-gradient(155deg, #B8935A, #8C6A3C)',
       services: ['haircut', 'haircut-beard', 'shave', 'kids'],
       areas: ['חיפה', 'קריית ים', 'קריית מוצקין', 'קריית ביאליק', 'קריית אתא', 'טירת כרמל', 'נשר']
@@ -109,6 +110,7 @@ document.addEventListener('DOMContentLoaded', function () {
       spec: 'מניקור ופדיקור',
       phone: '0507654321',
       initials: 'מל',
+      email: 'provider2@example.com',
       avatarBg: 'linear-gradient(155deg, #8A2C39, #6B1F2A)',
       services: ['manicure', 'pedicure', 'gel'],
       areas: ['תל אביב-יפו', 'רמת גן', 'גבעתיים', 'בני ברק', 'חולון', 'בת ים', 'ראשון לציון', 'אשדוד', 'רחובות', 'הרצליה']
@@ -119,6 +121,7 @@ document.addEventListener('DOMContentLoaded', function () {
       spec: 'תספורת + עיצוב זקן',
       phone: '0521112233',
       initials: 'רא',
+      email: 'provider3@example.com',
       avatarBg: 'linear-gradient(155deg, #3A2F25, #211B16)',
       services: ['haircut', 'haircut-beard', 'shave'],
       areas: ['ירושלים', 'מבשרת ציון', 'בית שמש', 'מעלה אדומים', 'אבו גוש']
@@ -129,6 +132,7 @@ document.addEventListener('DOMContentLoaded', function () {
       spec: "לק ג'ל ועיצוב ציפורניים",
       phone: '0534445566',
       initials: 'נש',
+      email: 'provider4@example.com',
       avatarBg: 'linear-gradient(155deg, #B8935A, #6B1F2A)',
       services: ['manicure', 'pedicure', 'gel'],
       areas: ['חיפה', 'קריית אתא', 'טירת כרמל', 'עכו', 'נהריה']
@@ -266,6 +270,17 @@ document.addEventListener('DOMContentLoaded', function () {
       }
 
       var provider = getProviderById(selectedProviderId);
+      var customerPhone = document.getElementById('phone') ? document.getElementById('phone').value.trim() : '';
+
+      saveBookingForProvider(provider, {
+        service: SERVICE_LABELS[service] || service,
+        area: area,
+        customerName: name,
+        customerPhone: customerPhone,
+        date: date,
+        time: time
+      });
+
 
       document.getElementById('paymentProviderName').textContent = ' ' + provider.name;
       // קישורים לדוגמה בלבד - יוחלפו בקישור התשלום האישי האמיתי של כל ספר/ית מ-Bit / PayBox
@@ -470,6 +485,225 @@ document.addEventListener('DOMContentLoaded', function () {
         .finally(function () {
           if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'שליחת פרטים להצטרפות'; }
         });
+    });
+  }
+  // ==========================================================
+  // Firebase - התחברות ספרים + לוח שנה אישי עם התורים שלהם
+  // ==========================================================
+  var firebaseReady = false;
+  var auth = null;
+  var db = null;
+
+  (function initFirebase() {
+    var cfg = window.firebaseConfig;
+    if (!cfg || cfg.apiKey === 'REPLACE_ME' || typeof firebase === 'undefined') {
+      return; // עוד לא הוגדר Firebase אמיתי - נשאיר את הודעת "המערכת בהקמה"
+    }
+    try {
+      firebase.initializeApp(cfg);
+      auth = firebase.auth();
+      db = firebase.firestore();
+      firebaseReady = true;
+      var warning = document.getElementById('providerConfigWarning');
+      if (warning) warning.style.display = 'none';
+    } catch (e) {
+      firebaseReady = false;
+    }
+  })();
+
+  // שמירת תור חדש ב-Firestore, משויך לספר/ית לפי האימייל שלו/ה
+  function saveBookingForProvider(provider, details) {
+    if (!firebaseReady || !provider || !provider.email) return;
+    db.collection('bookings').add({
+      providerId: provider.id,
+      providerEmail: provider.email,
+      providerName: provider.name,
+      customerName: details.customerName,
+      customerPhone: details.customerPhone,
+      service: details.service,
+      area: details.area,
+      date: details.date,
+      time: details.time,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    }).catch(function (err) {
+      console.error('שגיאה בשמירת התור ביומן:', err);
+    });
+  }
+
+  // --- טופס ההתחברות ---
+  var providerLoginForm = document.getElementById('providerLoginForm');
+  var providerLoginBox = document.getElementById('providerLoginBox');
+  var providerDashboard = document.getElementById('providerDashboard');
+  var providerLoginError = document.getElementById('providerLoginError');
+  var providerConfigWarning = document.getElementById('providerConfigWarning');
+  var providerLoginSubmit = document.getElementById('providerLoginSubmit');
+  var providerLogoutBtn = document.getElementById('providerLogoutBtn');
+
+  if (!firebaseReady && providerConfigWarning) {
+    providerConfigWarning.style.display = 'block';
+  }
+
+  if (providerLoginForm) {
+    providerLoginForm.addEventListener('submit', function (event) {
+      event.preventDefault();
+      if (!firebaseReady) {
+        if (providerLoginError) providerLoginError.textContent = 'מערכת ההתחברות עדיין בהקמה - נסו שוב מאוחר יותר.';
+        return;
+      }
+      var email = document.getElementById('providerEmail').value.trim();
+      var password = document.getElementById('providerPassword').value;
+      if (providerLoginError) providerLoginError.textContent = '';
+      if (providerLoginSubmit) { providerLoginSubmit.disabled = true; providerLoginSubmit.textContent = 'מתחבר/ת...'; }
+
+      auth.signInWithEmailAndPassword(email, password)
+        .catch(function () {
+          if (providerLoginError) providerLoginError.textContent = 'אימייל או סיסמה שגויים. נסו שוב או פנו לבעל/ת הרשת.';
+        })
+        .finally(function () {
+          if (providerLoginSubmit) { providerLoginSubmit.disabled = false; providerLoginSubmit.textContent = 'התחברות'; }
+        });
+    });
+  }
+
+  if (providerLogoutBtn) {
+    providerLogoutBtn.addEventListener('click', function () {
+      if (firebaseReady) auth.signOut();
+    });
+  }
+
+  if (firebaseReady) {
+    auth.onAuthStateChanged(function (user) {
+      if (user) {
+        showProviderDashboard(user);
+      } else {
+        if (providerLoginBox) providerLoginBox.hidden = false;
+        if (providerDashboard) providerDashboard.hidden = true;
+      }
+    });
+  }
+
+  // --- הלוח שנה האישי של הספר/ית ---
+  var providerAppointments = []; // { service, customerName, customerPhone, area, date (DD/MM/YYYY), time }
+  var providerCalDisplayDate = new Date();
+  providerCalDisplayDate.setDate(1);
+  var providerSelectedDay = null;
+
+  function showProviderDashboard(user) {
+    if (providerLoginBox) providerLoginBox.hidden = true;
+    if (providerDashboard) providerDashboard.hidden = false;
+
+    var matchedProvider = null;
+    for (var i = 0; i < PROVIDERS_LIST.length; i++) {
+      if (PROVIDERS_LIST[i].email === user.email) { matchedProvider = PROVIDERS_LIST[i]; break; }
+    }
+    var nameEl = document.getElementById('providerDashboardName');
+    if (nameEl) nameEl.textContent = matchedProvider ? matchedProvider.name : user.email;
+
+    db.collection('bookings').where('providerEmail', '==', user.email).get()
+      .then(function (snapshot) {
+        providerAppointments = [];
+        snapshot.forEach(function (doc) {
+          providerAppointments.push(doc.data());
+        });
+        renderProviderCalendar();
+        renderProviderAppointmentsList(null);
+      })
+      .catch(function (err) {
+        console.error('שגיאה בטעינת התורים:', err);
+      });
+  }
+
+  function appointmentsOnDate(dateStr) {
+    return providerAppointments.filter(function (a) { return a.date === dateStr; });
+  }
+
+  function googleCalendarLink(appt) {
+    var parts = appt.date.split('/'); // DD/MM/YYYY
+    var timeParts = (appt.time || '00:00').split(':');
+    var start = new Date(Number(parts[2]), Number(parts[1]) - 1, Number(parts[0]), Number(timeParts[0]), Number(timeParts[1]));
+    var end = new Date(start.getTime() + 45 * 60000);
+    function fmt(d) {
+      return d.getFullYear() + pad(d.getMonth() + 1) + pad(d.getDate()) + 'T' + pad(d.getHours()) + pad(d.getMinutes()) + '00';
+    }
+    var title = encodeURIComponent((appt.service || 'תור') + ' - ' + (appt.customerName || ''));
+    var details = encodeURIComponent('טלפון לקוח/ה: ' + (appt.customerPhone || '') + ' | אזור: ' + (appt.area || ''));
+    return 'https://calendar.google.com/calendar/render?action=TEMPLATE&text=' + title +
+      '&dates=' + fmt(start) + '/' + fmt(end) + '&details=' + details;
+  }
+
+  function renderProviderAppointmentsList(dateStr) {
+    var listEl = document.getElementById('providerAppointmentsList');
+    var titleEl = document.getElementById('providerAppointmentsTitle');
+    if (!listEl) return;
+
+    var items = dateStr ? appointmentsOnDate(dateStr) : providerAppointments.slice().sort(function (a, b) {
+      return a.date === b.date ? 0 : (new Date(a.date.split('/').reverse().join('-')) - new Date(b.date.split('/').reverse().join('-')));
+    });
+
+    if (titleEl) titleEl.textContent = dateStr ? ('התורים ל-' + dateStr) : 'כל התורים הקרובים';
+
+    if (items.length === 0) {
+      listEl.innerHTML = '<p class="provider-appointments-empty">אין תורים ' + (dateStr ? 'ליום הזה' : 'עדיין') + '.</p>';
+      return;
+    }
+
+    listEl.innerHTML = items.map(function (a) {
+      return '<div class="provider-appointment-card">' +
+        '<div class="provider-appointment-time">' + a.date + ' · ' + a.time + '</div>' +
+        '<div class="provider-appointment-service">' + (a.service || '') + '</div>' +
+        '<div class="provider-appointment-customer">' + (a.customerName || '') + (a.customerPhone ? ' · ' + a.customerPhone : '') + '</div>' +
+        '<div class="provider-appointment-area">' + (a.area || '') + '</div>' +
+        '<a class="provider-appointment-gcal" href="' + googleCalendarLink(a) + '" target="_blank">הוסף ליומן Google</a>' +
+        '</div>';
+    }).join('');
+  }
+
+  function renderProviderCalendar() {
+    var monthLabelEl = document.getElementById('providerCalMonthLabel');
+    var daysEl = document.getElementById('providerCalDays');
+    if (!daysEl) return;
+
+    var year = providerCalDisplayDate.getFullYear();
+    var month = providerCalDisplayDate.getMonth();
+    if (monthLabelEl) monthLabelEl.textContent = HEBREW_MONTHS[month] + ' ' + year;
+
+    var firstWeekday = new Date(year, month, 1).getDay();
+    var daysInMonth = new Date(year, month + 1, 0).getDate();
+
+    var html = '';
+    for (var e = 0; e < firstWeekday; e++) {
+      html += '<span class="cal-day cal-day-empty"></span>';
+    }
+    for (var d = 1; d <= daysInMonth; d++) {
+      var dateStr = pad(d) + '/' + pad(month + 1) + '/' + year;
+      var hasAppt = appointmentsOnDate(dateStr).length > 0;
+      var classes = 'cal-day' + (hasAppt ? ' cal-day-has-appt' : '') + (dateStr === providerSelectedDay ? ' cal-day-selected' : '');
+      html += '<span class="' + classes + '" data-date="' + dateStr + '">' + d + '</span>';
+    }
+    daysEl.innerHTML = html;
+
+    var dayEls = daysEl.querySelectorAll('.cal-day:not(.cal-day-empty)');
+    dayEls.forEach(function (el) {
+      el.addEventListener('click', function () {
+        providerSelectedDay = el.getAttribute('data-date');
+        renderProviderCalendar();
+        renderProviderAppointmentsList(providerSelectedDay);
+      });
+    });
+  }
+
+  var providerCalPrevBtn = document.getElementById('providerCalPrev');
+  var providerCalNextBtn = document.getElementById('providerCalNext');
+  if (providerCalPrevBtn) {
+    providerCalPrevBtn.addEventListener('click', function () {
+      providerCalDisplayDate = new Date(providerCalDisplayDate.getFullYear(), providerCalDisplayDate.getMonth() - 1, 1);
+      renderProviderCalendar();
+    });
+  }
+  if (providerCalNextBtn) {
+    providerCalNextBtn.addEventListener('click', function () {
+      providerCalDisplayDate = new Date(providerCalDisplayDate.getFullYear(), providerCalDisplayDate.getMonth() + 1, 1);
+      renderProviderCalendar();
     });
   }
 
