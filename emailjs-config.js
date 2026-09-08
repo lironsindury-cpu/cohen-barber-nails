@@ -19,7 +19,7 @@
 // עד שהערכים למטה לא יוחלפו, פשוט לא יישלח מייל אישור ללקוחות - שאר האתר
 // (כולל התור עצמו וההודעה לספר/ית) ימשיך לעבוד כרגיל.
 window.emailjsConfig = {
-serviceId: "REPLACE_ME",
-templateId: "REPLACE_ME",
-publicKey: "REPLACE_ME"
+serviceId: "service_1n10wda",
+templateId: "template_06c773f",
+publicKey: "TCUo6LelHbin742kc"
 };
